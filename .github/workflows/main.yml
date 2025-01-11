@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dockerfile
-          path: ./ # Save the dockerfile
+          path: dockerfile # Save the dockerfile
       
       # Step 7: Save NGINX Config as artifact
       - name: Save nginx config artifact
