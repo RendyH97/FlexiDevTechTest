@@ -6,8 +6,8 @@ This repository contains the Vue.js source code, Dockerfile, Nginx configuration
 
 Before you start, ensure you have the following:
 - An Azure Service Principal for deployment.
-- DockerHub credentials (or any other container registry you're using).
-- GitHub Actions enabled for your repository.
+- DockerHub credentials.
+- GitHub Actions workflow `.yml` file for your repository.
 
 ## Step 1: Add Azure Service Principal Credentials to GitHub Secrets
 
@@ -68,4 +68,4 @@ By following the steps outlined above, you can seamlessly deploy your Vue.js app
 - [Github Action - Download Artifact](https://github.com/actions/download-artifact)
 - [Github Action - Docker Login](https://github.com/docker/login-action)
 - [Github Action - Azure Login](https://github.com/Azure/login)
-- [Github Action - App Service Deploy](https://github.com/Azure/webapps-deploy)
+- [Github Action - App Service Deployment](https://github.com/Azure/webapps-deploy)
