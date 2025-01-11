@@ -35,7 +35,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dist-files
-          path: ./dist # Save the build files from the `dist` directory
+          path: ./dist # Save the build file
+      
+      # Step 6: Save dockerfile as artifact
+      - name: Save dockerfile artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dockerfile
+          path: ./ # Save the dockerfile
+      
+      # Step 7: Save NGINX Config as artifact
+      - name: Save nginx config artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nginx-config
+          path: ./nginx # Save the NGINX configuration file 
 
   # Job 2: Build Docker image and push to Docker Hub
   build-docker:
@@ -49,7 +63,25 @@ jobs:
         with:
           name: dist-files
 
-      # Step 2: Build Docker image and push to Docker Hub
+      # Step 2: Download the dockerfile
+      - name: Download dockerfile artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dockerfile
+
+      # Step 3: Download the NGINX configuration file
+      - name: Download nginx config artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nginx-config
+
+      # Step 4: Check directory
+      - name: 'Check directory'
+        run: |
+          pwd
+          ls
+
+      # Step 5: Build Docker image and push to Docker Hub
       - uses: azure/docker-login@v2
         with:
           username: ${{ secrets.REGISTRY_USERNAME }}
@@ -58,7 +90,7 @@ jobs:
           docker build . -t rendyhz97/flexidev-tech-test:${{ github.sha }}
           docker push rendyhz97/flexidev-tech-test:${{ github.sha }}
       
-      # Step 3: Docker Hub Logout
+      # Step 6: Docker Hub Logout
       - name: 'Docker Hub Logout'
         run: |
           docker logout
