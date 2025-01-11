@@ -1,0 +1,63 @@
+name: CICD Portal App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allows manual trigger of the workflow
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: main
+
+    # Step 2: Login to Azure
+    - name: 'Login to Azure'
+      uses: azure/login@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    # Step 3: Set up Node.js
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '14.18.1'
+
+    # Step 4: Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # Step 5: Build the Vue.js application
+    - name: Build Vue.js app
+      run: npm run build
+    
+    # Step 6: Build and Push Docker Image to Docker Hub
+    - uses: azure/docker-login@v6
+      with:
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_TOKEN }}
+    - run: |
+        docker build . -t rendyhz97/flexidev-tech-test:${{ github.sha }}
+        docker push rendyhz97/flexidev-tech-test:${{ github.sha }}
+    
+    # Step 6: Deploy docker image to Azure App Service
+    - name: 'Deploy to Azure Web App'
+      uses: azure/webapps-deploy@v3
+      with:
+        app-name: 'portal-flexi-dev' # App Service name
+        images: 'rendyhz97/flexidev-tech-test:${{ github.sha }}' # Docker image name
+
+    # Step 7: Azure CLI Logout
+    - name: 'Azure CLI Logout'
+      run: |
+        az logout
+    # Step 8: Docker Hub Logout
+    - name: 'Docker Hub Logout'
+      run: |
+        docker logout
