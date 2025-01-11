@@ -38,7 +38,7 @@ jobs:
       run: npm run build
     
     # Step 6: Build and Push Docker Image to Docker Hub
-    - uses: azure/docker-login@v6
+    - uses: azure/docker-login@v6.11.0
       with:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_TOKEN }}
