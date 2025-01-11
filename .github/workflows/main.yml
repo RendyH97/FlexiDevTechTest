@@ -9,7 +9,7 @@ on:
 jobs:
   # Job 1: Checkout and build the Vue.js app
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       # Step 1: Checkout the code
@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14.18.1'
+          node-version: '20.9.0'
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -53,7 +53,7 @@ jobs:
 
   # Job 2: Build Docker image and push to Docker Hub
   build-docker:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: build # Depends on the 'build' job
 
     steps:
